@@ -35,7 +35,37 @@ public class User {
         this.password = password;
     }
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public @NotBlank @Size(max = 50) String getUsername() {
+        return username;
+    }
+
+    public void setUsername(@NotBlank @Size(max = 50) String username) {
+        this.username = username;
+    }
+
+    public @Email @NotBlank String getEmail() {
+        return email;
+    }
+
+    public void setEmail(@Email @NotBlank String email) {
+        this.email = email;
+    }
+
+    public @NotBlank String getPassword() {
+        return password;
+    }
+
+    public void setPassword(@NotBlank String password) {
+        this.password = password;
+    }
 
     @Override
     public String toString() {

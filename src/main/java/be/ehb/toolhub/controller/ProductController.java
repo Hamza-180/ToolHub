@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors; // Voor gebruik in getAllCategories
 
 @RestController
 @RequestMapping("/api/products")
@@ -17,7 +19,10 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping
-    public List<Product> getAllProducts() {
+    public List<Product> getAllProducts(@RequestParam(required = false) String category) {
+        if (category != null && !category.isEmpty()) {
+            return productService.getProductsByCategory(category);
+        }
         return productService.getAllProducts();
     }
 
@@ -39,4 +44,12 @@ public class ProductController {
         productService.deleteProduct(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    // Voeg deze methode toe om alle unieke categorieën op te halen
+    @GetMapping("/categories")
+    public ResponseEntity<Set<String>> getAllCategories() {
+        Set<String> categories = (Set<String>) productService.getAllCategories();
+        return new ResponseEntity<>(categories, HttpStatus.OK);
+    }
+
 }
