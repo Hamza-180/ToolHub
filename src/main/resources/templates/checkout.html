@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,44 +7,67 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container mt-5">
-        <h1>Checkout</h1>
-        <h4 id="cart-total">Totaal: €0.00</h4> <!-- Totaalbedrag -->
-        <button class="btn btn-success" onclick="checkout()">Bevestig Aankoop</button>
-        <a href="/" class="btn btn-info mt-3">Terug naar Home</a>
-    </div>
+   <div class="container mt-5">
+    <h1>Checkout</h1>
+    <h4 id="cart-total">Totaal: €0.00</h4>
+    <form id="checkout-form">
+        <div class="form-group">
+            <label for="username">Naam</label>
+            <input type="text" id="username" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="email">E-mailadres</label>
+            <input type="email" id="email" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-success">Bevestig Aankoop</button>
+    </form>
+    <a href="/" class="btn btn-info mt-3">Terug naar Home</a>
+</div>
 
-    <script>
-        // Functie om het totaalbedrag van het winkelwagentje op te halen
-        function fetchCartTotal() {
-            fetch('/api/cart/total')
-                .then(response => response.json())
-                .then(total => {
-                    document.getElementById('cart-total').textContent = `Totaal: €${total.toFixed(2)}`;
-                })
-                .catch(error => console.error('Error fetching cart total:', error));
-        }
-
-        // Functie om de checkout te voltooien
-        function checkout() {
-            fetch('/api/cart/checkout', {
-                method: 'POST'
+<script>
+    // Functie om het totaalbedrag van het winkelwagentje op te halen
+    function fetchCartTotal() {
+        fetch('/api/cart/total')
+            .then(response => response.json())
+            .then(total => {
+                document.getElementById('cart-total').textContent = `Totaal: €${total.toFixed(2)}`;
             })
-            .then(response => {
-                if (response.ok) {
-                    alert("Aankoop bevestigd!");
-                    window.location.href = "/"; // Terug naar de homepagina
-                } else {
-                    alert("Fout bij de checkout.");
-                }
-            })
-            .catch(error => console.error('Error during checkout:', error));
-        }
+            .catch(error => console.error('Error fetching cart total:', error));
+    }
 
-        // Haal het totaalbedrag op wanneer de pagina laadt
-        window.onload = function() {
-            fetchCartTotal();
+    // Functie om de checkout te voltooien
+    function checkout(event) {
+        event.preventDefault();
+
+        const userData = {
+            username: document.getElementById('username').value,
+            email: document.getElementById('email').value
         };
-    </script>
+
+        fetch('/api/cart/checkout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData) // Verstuur de gebruikersinformatie
+        })
+        .then(response => {
+            if (response.ok) {
+                alert("Aankoop bevestigd!");
+                window.location.href = "/confirmation"; // Redirect naar de bevestigingspagina
+            } else {
+                alert("Fout bij de checkout: " + response.statusText);
+            }
+        })
+        .catch(error => console.error('Error during checkout:', error));
+    }
+
+    // Haal het totaalbedrag op wanneer de pagina laadt
+    window.onload = function() {
+        fetchCartTotal();
+        document.getElementById('checkout-form').addEventListener('submit', checkout); // Voeg de checkout-functie toe aan het formulier
+    };
+</script>
+
 </body>
 </html>

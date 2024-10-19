@@ -1,11 +1,17 @@
 package be.ehb.toolhub.controller;
 
 import be.ehb.toolhub.model.Product;
+import be.ehb.toolhub.model.Reservation;
+import be.ehb.toolhub.model.User;
+import be.ehb.toolhub.repository.ReservationRepository;
+import be.ehb.toolhub.repository.UserRepository; // Voeg deze import toe
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +20,12 @@ import java.util.List;
 public class CartController {
 
     private List<Product> cart = new ArrayList<>();
+
+    @Autowired
+    private ReservationRepository reservationRepository;
+
+    @Autowired
+    private UserRepository userRepository; // Voeg deze lijn toe
 
     @GetMapping
     public ResponseEntity<List<Product>> getCart() {
@@ -32,12 +44,33 @@ public class CartController {
         return new ResponseEntity<>("Product removed from cart", HttpStatus.OK);
     }
 
-    @PostMapping("/checkout")
-    public ResponseEntity<String> checkout() {
-        // Hier kun je de logica toevoegen voor de checkout, zoals het opslaan van de bestelling in de database
-        cart.clear(); // Leeg de winkelwagentje na de checkout
-        return new ResponseEntity<>("Checkout completed", HttpStatus.OK);
+   @PostMapping("/checkout")
+public ResponseEntity<String> checkout(@RequestBody User user) {
+    if (cart.isEmpty()) {
+        return new ResponseEntity<>("Cart is empty", HttpStatus.BAD_REQUEST);
     }
+
+    for (Product product : cart) {
+        try {
+            // Maak een nieuwe reservering aan met alleen naam en e-mail
+            Reservation reservation = new Reservation();
+
+            reservation.setProduct(product);
+            reservation.setStartDate(LocalDate.now());
+            reservation.setEndDate(LocalDate.now().plusDays(1));
+            reservation.setStatus("Bevestigd");
+
+            reservationRepository.save(reservation);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error during checkout: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    cart.clear();
+    return new ResponseEntity<>("Checkout completed", HttpStatus.OK);
+}
+
+
 
     @GetMapping("/total")
     public ResponseEntity<BigDecimal> getTotalPrice() {

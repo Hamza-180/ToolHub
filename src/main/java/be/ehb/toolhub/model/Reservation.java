@@ -9,8 +9,8 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private User user; //
+    private String username;
+    private String email;
 
     @ManyToOne
     private Product product;
@@ -23,8 +23,9 @@ public class Reservation {
 
     }
 
-    public Reservation(User user, Product product, LocalDate startDate, LocalDate endDate, String status) {
-        this.user = user;
+    public Reservation(String username, String email, Product product, LocalDate startDate, LocalDate endDate, String status) {
+        this.username = username;
+        this.email = email;
         this.product = product;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -39,12 +40,20 @@ public class Reservation {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Product getProduct() {
@@ -83,7 +92,8 @@ public class Reservation {
     public String toString() {
         return "Reservation{" +
                 "id=" + id +
-                ", user=" + user +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
                 ", product=" + product +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
