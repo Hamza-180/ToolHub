@@ -5,6 +5,8 @@ import be.ehb.toolhub.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +24,13 @@ public class ReservationController {
     }
 
     @PostMapping
-    public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) {
+    public ResponseEntity<Reservation> createReservation(
+            @RequestBody Reservation reservation,
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        if (userDetails != null) {
+            reservation.setUsername(userDetails.getUsername());
+        }
         Reservation createdReservation = reservationService.createReservation(reservation);
         return new ResponseEntity<>(createdReservation, HttpStatus.CREATED);
     }

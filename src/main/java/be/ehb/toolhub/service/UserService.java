@@ -9,4 +9,6 @@ public interface UserService {
     Optional<User> getUserById(Long id);
     User createUser(User user);
     void deleteUser(Long id);
+
+    User registerUser(String username, String password);
 }

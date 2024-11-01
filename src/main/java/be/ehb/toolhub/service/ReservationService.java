@@ -16,11 +16,17 @@ public class ReservationService {
         return reservationRepository.findAll();
     }
 
+    // Accepteert nu een Reservation-object in plaats van een String
     public Reservation createReservation(Reservation reservation) {
+        // Hier kun je andere logica toevoegen indien nodig
         return reservationRepository.save(reservation);
     }
 
     public void deleteReservation(Long id) {
         reservationRepository.deleteById(id);
+    }
+
+    public List<Reservation> getReservationsByUsername(String username) {
+        return reservationRepository.findByUsername(username);
     }
 }
