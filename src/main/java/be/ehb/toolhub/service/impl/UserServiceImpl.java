@@ -1,7 +1,8 @@
-package be.ehb.toolhub.service;
+package be.ehb.toolhub.service.impl;
 
 import be.ehb.toolhub.model.User;
 import be.ehb.toolhub.repository.UserRepository;
+import be.ehb.toolhub.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,8 +31,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword())); 
-        return userRepository.save(user);
+        user.setPassword(passwordEncoder.encode(user.getPassword())); // Wachtwoord hashen
+        return userRepository.save(user); // Sla de gebruiker op in de database
     }
 
     @Override
@@ -39,11 +40,14 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
-    @Override
-    public User registerUser(String username, String password) {
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(passwordEncoder.encode(password));
-        return userRepository.save(user);
+   @Override
+public User registerUser(User user) {
+    if (userRepository.existsByUsername(user.getUsername())) {
+        throw new IllegalArgumentException("Gebruikersnaam bestaat al");
     }
+    user.setPassword(passwordEncoder.encode(user.getPassword())); // Wachtwoord hashen
+    return userRepository.save(user);
+}
+
+
 }

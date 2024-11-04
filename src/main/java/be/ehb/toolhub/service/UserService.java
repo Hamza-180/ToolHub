@@ -7,8 +7,7 @@ import java.util.Optional;
 public interface UserService {
     List<User> getAllUsers();
     Optional<User> getUserById(Long id);
-    User createUser(User user);
+    User createUser(User user); // Als deze niet wordt gebruikt, kun je deze verwijderen
     void deleteUser(Long id);
-
-    User registerUser(String username, String password);
+    User registerUser(User user); // Gebruiker registreren
 }
