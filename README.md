@@ -2,6 +2,8 @@
 
 Welkom bij het **ToolHub** project! Dit platform stelt gebruikers in staat om producten te beheren, reserveringen te maken en zich te registreren/inloggen voor een gebruiksvriendelijke ervaring. Hieronder volgt een gedetailleerd overzicht van de belangrijkste componenten en configuraties binnen de ToolHub-toepassing.
 
+###  Op xamp moet je zelf een database aanmaken genaamd toolhub zodat spring het database herkent.
+
 ## Overzicht van de Belangrijkste Componenten
 
 ### 1. **AuthController.java** (Authenticatie Controller)
