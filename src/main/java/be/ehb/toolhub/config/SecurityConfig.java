@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -28,13 +29,20 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/api/reservations/**").authenticated()
-                .requestMatchers("/").permitAll()
-                .anyRequest().permitAll()
+                .requestMatchers("/login", "/register").permitAll()
+                .anyRequest().authenticated()
             )
             .formLogin(form -> form
-                .loginPage("/login")
+                .loginPage("/login") // Specificeer de loginpagina
                 .permitAll()
+                .defaultSuccessUrl("/dashboard", true) // Redirect naar dashboard na succesvolle login
+            )
+            .logout(logout -> logout
+                .logoutSuccessUrl("/login?logout") // Redirect naar login na uitloggen
+            )
+            .sessionManagement(session -> session
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // Sessies pas maken als dat nodig is
+                .invalidSessionUrl("/login") // Redirect als sessie ongeldig is
             )
             .httpBasic(withDefaults());
 
@@ -43,7 +51,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(12);
     }
 
     @Bean

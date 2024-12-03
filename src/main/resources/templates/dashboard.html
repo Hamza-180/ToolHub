@@ -1,17 +1,84 @@
 <!DOCTYPE html>
 <html lang="nl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - ToolHub</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"> <!-- Voor iconen -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+        .card {
+            margin-top: 20px;
+        }
+        .btn {
+            width: 100%;
+            font-size: 1.1em;
+        }
+        .dashboard-header {
+            background-color: #343a40;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        .dashboard-header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .dashboard-header p {
+            font-size: 1.1em;
+        }
+    </style>
 </head>
+
 <body>
     <div class="container">
-        <h1>Dashboard</h1>
-        <p>Welkom terug!</p>
-        <a href="/product-list" class="btn btn-primary">Bekijk Productlijst</a>
-        <a href="/add-product" class="btn btn-secondary">Voeg Nieuw Product Toe</a>
+        <!-- Header -->
+        <div class="dashboard-header">
+            <h1>Dashboard - ToolHub</h1>
+            <p>Welkom terug, beheer je producten en reserveringen</p>
+            <a class="nav-link" href="/logout">Logout</a>
+        </div>
+
+        <!-- Dashboard Links -->
+        <div class="row">
+            <!-- Bekijk Productlijst -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h4 class="card-title"><i class="fas fa-box-open"></i> Bekijk Productlijst</h4>
+                        <p class="card-text">Bekijk de lijst met alle beschikbare producten in de catalogus.</p>
+                        <a href="/product-list" class="btn btn-primary">Bekijk Productlijst</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Voeg Nieuw Product Toe -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h4 class="card-title"><i class="fas fa-plus-circle"></i> Voeg Nieuw Product Toe</h4>
+                        <p class="card-text">Voeg een nieuw product toe aan de catalogus.</p>
+                        <a href="/add-product" class="btn btn-secondary">Voeg Nieuw Product Toe</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Extra Secties -->
+        <div class="row">
+
+        </div>
     </div>
+
+    <!-- Bootstrap JS en Font Awesome (voor iconen) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>
