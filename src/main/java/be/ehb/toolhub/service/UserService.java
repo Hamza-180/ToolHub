@@ -10,4 +10,5 @@ public interface UserService {
     User createUser(User user); // Als deze niet wordt gebruikt, kun je deze verwijderen
     void deleteUser(Long id);
     User registerUser(User user); // Gebruiker registreren
+    Optional<User> getUserByUsername(String username);
 }
