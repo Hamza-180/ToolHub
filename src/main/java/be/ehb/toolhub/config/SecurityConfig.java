@@ -27,27 +27,31 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/login", "/register").permitAll()
-                .anyRequest().authenticated()
-            )
-            .formLogin(form -> form
-                .loginPage("/login") // Specificeer de loginpagina
-                .permitAll()
-                .defaultSuccessUrl("/dashboard", true) // Redirect naar dashboard na succesvolle login
-            )
-            .logout(logout -> logout
-                .logoutSuccessUrl("/login?logout") // Redirect naar login na uitloggen
-            )
-            .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // Sessies pas maken als dat nodig is
-                .invalidSessionUrl("/login") // Redirect als sessie ongeldig is
-            )
-            .httpBasic(withDefaults());
+
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/login", "/register")
+                )
+                .authorizeHttpRequests(authz -> authz
+                        .requestMatchers("/login", "/register").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .permitAll()
+                        .defaultSuccessUrl("/dashboard", true)
+                )
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/login?logout")
+                )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                        .invalidSessionUrl("/login")
+                )
+                .httpBasic(withDefaults());
 
         return http.build();
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
