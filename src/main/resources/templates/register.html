@@ -1,22 +1,68 @@
 <!DOCTYPE html>
 <html lang="nl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registreren</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        h1 { color: #333; }
-        form { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; }
-        input { width: 100%; padding: 8px; margin-bottom: 12px; }
-        button { padding: 10px 15px; background-color: #007BFF; color: white; border: none; cursor: pointer; }
-        button:hover { background-color: #0056b3; }
-        #registerMessage { margin-top: 10px; color: red; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 12px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .message {
+            margin-top: 10px;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .success {
+            color: green;
+        }
+
+        .link {
+            margin-top: 20px;
+        }
     </style>
 </head>
+
 <body>
     <h1>Registreren</h1>
+
     <form id="registerForm">
         <label for="registerUsername">Gebruikersnaam:</label>
         <input type="text" id="registerUsername" name="registerUsername" required>
@@ -29,35 +75,57 @@
 
         <button type="submit">Registreren</button>
     </form>
-    <p id="registerMessage"></p>
+
+    <div id="registerMessage" class="message error"></div>
+    <div id="successMessage" class="message success"></div>
+
     <p class="link">
-        <button onclick="location.href='login'" style="background-color: #007BFF; color: white; border: none; cursor: pointer; padding: 10px 15px;">Al een account? Log hier in.</button>
+        <button onclick="location.href='login'" style="background-color: #007BFF; color: white; border: none; cursor: pointer; padding: 10px 15px;">
+            Al een account? Log hier in.
+        </button>
     </p>
 
     <script>
-        document.getElementById('registerForm').addEventListener('submit', function(event) {
+        // Event listener for the form submission
+        document.getElementById('registerForm').addEventListener('submit', function (event) {
             event.preventDefault();
 
+            // Get form values
             const username = document.getElementById('registerUsername').value;
             const email = document.getElementById('registerEmail').value;
             const password = document.getElementById('registerPassword').value;
 
+            // Send registration request
             fetch('/api/auth/register', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, email, password })
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, email, password }),
             })
-            .then(response => {
-                if (!response.ok) throw new Error('Registratie mislukt');
-                return response.text();
-            })
-            .then(data => {
-                document.getElementById('registerMessage').innerText = data;
-            })
-            .catch(error => {
-                document.getElementById('registerMessage').innerText = error.message;
-            });
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Registratie mislukt. Probeer het opnieuw.');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    // Show success message and clear any previous errors
+                    document.getElementById('successMessage').innerText = 'Registratie succesvol! Je kunt nu inloggen.';
+                    document.getElementById('registerMessage').innerText = '';
+
+                    // Redirect to the login page after 2 seconds
+                    setTimeout(function () {
+                        window.location.href = '/login';
+                    }, 1500);
+                })
+                .catch(error => {
+                    // Display error message if registration fails
+                    document.getElementById('registerMessage').innerText = error.message;
+                    document.getElementById('successMessage').innerText = ''; // Clear success message if error occurs
+                });
         });
     </script>
 </body>
+
 </html>
