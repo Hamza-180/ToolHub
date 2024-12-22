@@ -1,69 +1,29 @@
 <!DOCTYPE html>
 <html lang="nl">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" content="${_csrf.token}"> <!-- Voeg CSRF-token toe -->
     <title>Registreren</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-
-        h1 {
-            color: #333;
-        }
-
-        form {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        input {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 12px;
-        }
-
-        button {
-            padding: 10px 15px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        .message {
-            margin-top: 10px;
-        }
-
-        .error {
-            color: red;
-        }
-
-        .success {
-            color: green;
-        }
-
-        .link {
-            margin-top: 20px;
-        }
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333; }
+        form { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; }
+        input { width: 100%; padding: 8px; margin-bottom: 12px; }
+        button { padding: 10px 15px; background-color: #007BFF; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        .message { margin-top: 10px; }
+        .error { color: red; }
+        .success { color: green; }
+        .link { margin-top: 20px; }
     </style>
 </head>
-
 <body>
     <h1>Registreren</h1>
 
-    <form id="registerForm">
+    <form id="registerForm" method="POST">
+        <input type="hidden" name="_csrf" value="${_csrf.token}"> <!-- CSRF Token -->
         <label for="registerUsername">Gebruikersnaam:</label>
         <input type="text" id="registerUsername" name="registerUsername" required>
 
@@ -94,25 +54,29 @@
             const username = document.getElementById('registerUsername').value;
             const email = document.getElementById('registerEmail').value;
             const password = document.getElementById('registerPassword').value;
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content'); // Haal CSRF-token op
 
             // Send registration request
             fetch('/api/auth/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken  // Voeg CSRF-token toe aan de header
                 },
-                body: JSON.stringify({ username, email, password }),
+                body: JSON.stringify({ username, email, password })
             })
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Registratie mislukt. Probeer het opnieuw.');
+                        return response.json().then(err => {
+                            throw new Error(err.message || 'Registratie mislukt. Probeer het opnieuw.');
+                        });
                     }
                     return response.text();
                 })
                 .then(data => {
                     // Show success message and clear any previous errors
                     document.getElementById('successMessage').innerText = 'Registratie succesvol! Je kunt nu inloggen.';
-                    document.getElementById('registerMessage').innerText = '';
+                    document.getElementById('registerMessage').innerText = ''; // Clear error message
 
                     // Redirect to the login page after 2 seconds
                     setTimeout(function () {
@@ -127,5 +91,4 @@
         });
     </script>
 </body>
-
 </html>

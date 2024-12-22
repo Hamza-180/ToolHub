@@ -25,23 +25,25 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) // Disable CSRF for testing (re-enable in production)
+            .csrf(csrf -> csrf
+                .ignoringRequestMatchers("/login", "/register")
+            )
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/login", "/register").permitAll()  // Permit access to login and register pages
-                .requestMatchers("/api/reservations/**").authenticated()  // Protect the reservations API
-                .anyRequest().permitAll()  // Allow other requests without authentication
+                .requestMatchers("/login", "/register").permitAll()
+                .requestMatchers("/api/reservations/**").authenticated()  // Alleen voor geauthenticeerde gebruikers
+                .anyRequest().permitAll()  // Alle andere verzoeken zonder authenticatie
             )
             .formLogin(form -> form
-                .loginPage("/login")  // Custom login page
+                .loginPage("/login")  // Aangepaste loginpagina
                 .permitAll()
-                .defaultSuccessUrl("/dashboard", true)  // Redirect to dashboard after login
+                .defaultSuccessUrl("/dashboard", true)  // Redirect naar dashboard na succesvolle login
             )
             .logout(logout -> logout
-                .logoutSuccessUrl("/login?logout")  // Redirect to login page after logout
+                .logoutSuccessUrl("/login?logout")  // Redirect naar loginpagina na logout
             )
             .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)  // Only create session when required
-                .invalidSessionUrl("/login")  // Redirect to login if session is invalid
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)  // Alleen sessies maken wanneer nodig
+                .invalidSessionUrl("/login")
             );
 
         return http.build();
@@ -49,7 +51,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();  // Default strength is 10, adjust as needed
+        return new BCryptPasswordEncoder(12);
     }
 
     @Bean

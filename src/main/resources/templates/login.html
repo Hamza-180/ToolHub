@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" content="${_csrf.token}"> <!-- Voeg CSRF-token toe -->
     <title>Inloggen</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
@@ -17,7 +18,8 @@
 </head>
 <body>
     <h1>Inloggen</h1>
-    <form id="loginForm">
+    <form id="loginForm" method="POST">
+        <input type="hidden" name="_csrf" value="${_csrf.token}"> <!-- CSRF Token -->
         <label for="loginUsername">Gebruikersnaam:</label>
         <input type="text" id="loginUsername" name="loginUsername" required>
 
@@ -37,29 +39,31 @@
 
             const username = document.getElementById('loginUsername').value;
             const password = document.getElementById('loginPassword').value;
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content'); // Haal CSRF-token op
 
             fetch('/api/auth/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password })
-})
-.then(response => {
-    if (!response.ok) {
-        return response.text().then(text => {
-            throw new Error(text || 'Inloggen mislukt');
-        });
-    }
-    return response.text();
-})
-.then(data => {
-    document.getElementById('loginMessage').innerText = 'Inloggen succesvol!';
-
-    window.location.href = '/dashboard';
-})
-.catch(error => {
-    document.getElementById('loginMessage').innerText = error.message;
-});
-
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken  // Voeg het CSRF-token toe aan de header
+                },
+                body: JSON.stringify({ username, password })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => {
+                        throw new Error(err.message || 'Inloggen mislukt');
+                    });
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('loginMessage').innerText = 'Inloggen succesvol!';
+                window.location.href = '/dashboard';
+            })
+            .catch(error => {
+                document.getElementById('loginMessage').innerText = error.message;
+            });
         });
     </script>
 </body>
