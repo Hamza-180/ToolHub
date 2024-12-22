@@ -41,7 +41,14 @@
         <div class="dashboard-header">
             <h1>Dashboard - ToolHub</h1>
             <p>Welkom terug, beheer je producten en reserveringen</p>
-            <a class="nav-link" href="/logout">Logout</a>
+
+            <!-- Logout link -->
+            <a class="nav-link" href="#" onclick="document.getElementById('logout-form').submit();">Logout</a>
+
+            <!-- Logout Formulier -->
+            <form id="logout-form" action="/logout" method="POST" style="display: none;">
+                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+            </form>
         </div>
 
         <!-- Dashboard Links -->

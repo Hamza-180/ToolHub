@@ -26,12 +26,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf
-                .ignoringRequestMatchers("/login", "/register")
+                .ignoringRequestMatchers("/login", "/register", "/logout")
             )
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/login", "/register").permitAll()
+                .requestMatchers("/login", "/register").permitAll()  // Zorg ervoor dat login en register zonder authenticatie toegankelijk zijn
                 .requestMatchers("/api/reservations/**").authenticated()  // Alleen voor geauthenticeerde gebruikers
-                .anyRequest().permitAll()  // Alle andere verzoeken zonder authenticatie
+                .anyRequest().permitAll()
             )
             .formLogin(form -> form
                 .loginPage("/login")  // Aangepaste loginpagina
@@ -39,11 +39,14 @@ public class SecurityConfig {
                 .defaultSuccessUrl("/dashboard", true)  // Redirect naar dashboard na succesvolle login
             )
             .logout(logout -> logout
-                .logoutSuccessUrl("/login?logout")  // Redirect naar loginpagina na logout
+                .logoutUrl("/logout")  // Zorg ervoor dat de logout URL correct is ingesteld
+                .logoutSuccessUrl("/login?logout")  // Redirect naar loginpagina na logout.invalidateHttpSession(true)  // Vernietig de sessie bij uitloggen
+                .clearAuthentication(true)
+                .permitAll()  // Maak logout openbaar toegankelijk
             )
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)  // Alleen sessies maken wanneer nodig
-                .invalidSessionUrl("/login")
+                .invalidSessionUrl("/login")  // Redirect naar login als de sessie ongeldig is
             );
 
         return http.build();
