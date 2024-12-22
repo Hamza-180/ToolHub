@@ -25,28 +25,27 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf
-                .ignoringRequestMatchers("/login", "/register", "/logout")
-            )
+            .csrf(csrf -> csrf.disable())  // Disable CSRF protection
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/login", "/register").permitAll()  // Zorg ervoor dat login en register zonder authenticatie toegankelijk zijn
-                .requestMatchers("/api/reservations/**").authenticated()  // Alleen voor geauthenticeerde gebruikers
+                .requestMatchers("/login", "/register").permitAll()  // Ensure login and register are accessible without authentication
+                .requestMatchers("/api/reservations/**").authenticated()  // Only authenticated users can access reservations
                 .anyRequest().permitAll()
             )
             .formLogin(form -> form
-                .loginPage("/login")  // Aangepaste loginpagina
+                .loginPage("/login")  // Custom login page
                 .permitAll()
-                .defaultSuccessUrl("/dashboard", true)  // Redirect naar dashboard na succesvolle login
+                .defaultSuccessUrl("/dashboard", true)  // Redirect to dashboard after successful login
             )
             .logout(logout -> logout
-                .logoutUrl("/logout")  // Zorg ervoor dat de logout URL correct is ingesteld
-                .logoutSuccessUrl("/login?logout")  // Redirect naar loginpagina na logout.invalidateHttpSession(true)  // Vernietig de sessie bij uitloggen
+                .logoutUrl("/logout")  // Ensure logout URL is correctly set
+                .logoutSuccessUrl("/login?logout")  // Redirect to login page after logout
+                .invalidateHttpSession(true)  // Invalidate the session on logout
                 .clearAuthentication(true)
-                .permitAll()  // Maak logout openbaar toegankelijk
+                .permitAll()  // Make logout publicly accessible
             )
             .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)  // Alleen sessies maken wanneer nodig
-                .invalidSessionUrl("/login")  // Redirect naar login als de sessie ongeldig is
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)  // Only create sessions when needed
+                .invalidSessionUrl("/login")  // Redirect to login if the session is invalid
             );
 
         return http.build();
