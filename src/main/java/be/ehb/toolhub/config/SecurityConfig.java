@@ -25,8 +25,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-
-            .authorizeHttpRequests(authz -> authz
+            .authorizeRequests(authz -> authz
                 .requestMatchers("/login", "/register").permitAll()  // Zorg ervoor dat login en register toegankelijk zijn zonder authenticatie
                 .requestMatchers("/api/reservations/**").authenticated()  // Alleen geauthenticeerde gebruikers kunnen reserveringen openen
                 .anyRequest().permitAll()
@@ -43,13 +42,14 @@ public class SecurityConfig {
                 .clearAuthentication(true)
                 .permitAll()  // Zorg ervoor dat logout openbaar toegankelijk is
             )
-                .csrf(csrf -> csrf
-                .ignoringRequestMatchers("/api/auth/login", "/api/auth/register","/api/**")
+            .csrf(csrf -> csrf
+                .ignoringRequestMatchers("/api/auth/login", "/api/auth/register", "/api/**", "/logout")
             )
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)  // Maak alleen sessies wanneer nodig
                 .invalidSessionUrl("/login")  // Redirect naar login bij een ongeldige sessie
-
+                .maximumSessions(1)  // Zorg ervoor dat slechts 1 sessie per gebruiker actief is
+                .expiredUrl("/login?expired")  // Redirect naar een speciale pagina als de sessie is verlopen
             );
 
         return http.build();

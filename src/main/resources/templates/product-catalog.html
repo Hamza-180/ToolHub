@@ -24,9 +24,12 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/product-list">Remove Product</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/logout">Logout</a>
-                </li>
+
+
+            <a class="nav-link" href="#" onclick="document.getElementById('logout-form').submit();">Logout</a>
+            <form id="logout-form" action="/logout" method="POST" style="display: none;">
+                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+            </form>
                 
             </ul>
         </div>
@@ -67,10 +70,10 @@
                         productDiv.innerHTML = `
                             <div class="card mb-4">
                                 <div class="card-body">
-                                    <h5 class="card-title">${product.name}</h5>
-                                    <p class="card-text">${product.category}</p>
+                                    <h5 class="card-title">${"Name: " + product.name}</h5>
+                                    <p class="card-text">${"Category: " + product.category}</p>
                                     <p class="card-text">Price: $${product.price}</p>
-                                    <p class="card-text">${"descriptie: "+  product.description}</p>
+                                    <p class="card-text">${"Descriptie: " +  product.description}</p>
                                     <button class="btn btn-primary" onclick="addToCart(${product.id})">Add to Cart</button>
                                 </div>
                             </div>
