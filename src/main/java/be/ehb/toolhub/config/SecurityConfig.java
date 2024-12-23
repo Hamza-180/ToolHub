@@ -25,27 +25,31 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())  // Disable CSRF protection
+
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/login", "/register").permitAll()  // Ensure login and register are accessible without authentication
-                .requestMatchers("/api/reservations/**").authenticated()  // Only authenticated users can access reservations
+                .requestMatchers("/login", "/register").permitAll()  // Zorg ervoor dat login en register toegankelijk zijn zonder authenticatie
+                .requestMatchers("/api/reservations/**").authenticated()  // Alleen geauthenticeerde gebruikers kunnen reserveringen openen
                 .anyRequest().permitAll()
             )
             .formLogin(form -> form
-                .loginPage("/login")  // Custom login page
+                .loginPage("/login")  // Aangepaste inlogpagina
                 .permitAll()
-                .defaultSuccessUrl("/dashboard", true)  // Redirect to dashboard after successful login
+                .defaultSuccessUrl("/dashboard", true)  // Redirect naar dashboard na succesvolle login
             )
             .logout(logout -> logout
-                .logoutUrl("/logout")  // Ensure logout URL is correctly set
-                .logoutSuccessUrl("/login?logout")  // Redirect to login page after logout
-                .invalidateHttpSession(true)  // Invalidate the session on logout
+                .logoutUrl("/logout")  // Zorg ervoor dat de logout-URL correct is ingesteld
+                .logoutSuccessUrl("/login?logout")  // Redirect naar login-pagina na logout
+                .invalidateHttpSession(true)  // Vernietig de sessie bij logout
                 .clearAuthentication(true)
-                .permitAll()  // Make logout publicly accessible
+                .permitAll()  // Zorg ervoor dat logout openbaar toegankelijk is
+            )
+                .csrf(csrf -> csrf
+                .ignoringRequestMatchers("/api/auth/login", "/api/auth/register","/api/**")
             )
             .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)  // Only create sessions when needed
-                .invalidSessionUrl("/login")  // Redirect to login if the session is invalid
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)  // Maak alleen sessies wanneer nodig
+                .invalidSessionUrl("/login")  // Redirect naar login bij een ongeldige sessie
+
             );
 
         return http.build();

@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="${_csrf.token}">
     <title>Add New Product</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -21,6 +22,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/add-product">Add Product</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/product-list">Remove Product</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/logout">Logout</a>
@@ -69,6 +73,8 @@
             const quantity = document.getElementById('quantity').value;
             const price = document.getElementById('price').value;
 
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
             // Create product object
             const product = {
                 name: name,
@@ -82,7 +88,8 @@
             fetch('/api/products', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
                 },
                 body: JSON.stringify(product)
             })

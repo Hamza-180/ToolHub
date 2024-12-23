@@ -39,7 +39,7 @@
 
             const username = document.getElementById('loginUsername').value;
             const password = document.getElementById('loginPassword').value;
-            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content'); // Haal CSRF-token op
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
 
             fetch('/api/auth/login', {
                 method: 'POST',
