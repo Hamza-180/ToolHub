@@ -26,7 +26,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/product-list">Remove Product</a>
                 </li>
-                    <a class="nav-link" href="#" onclick="document.getElementById('logout-form').submit();">Logout</a>
+                <a class="nav-link" href="#" onclick="document.getElementById('logout-form').submit();">Logout</a>
             <form id="logout-form" action="/logout" method="POST" style="display: none;">
                 <input type="hidden" name="_csrf" value="${_csrf.token}"/>
             </form>
@@ -43,6 +43,9 @@
     </div>
 
     <script>
+        // Get CSRF token from meta tag
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
         // Fetch products from the API
         function fetchProducts() {
             fetch('/api/products')
@@ -74,9 +77,9 @@
                 fetch(`/api/products/${productId}`, {
                     method: 'DELETE',
                     headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': csrfToken // Voeg de CSRF-token toe aan de header
-            }
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken // Add the CSRF token to the request header
+                    }
                 })
                 .then(response => {
                     if (response.ok) {
