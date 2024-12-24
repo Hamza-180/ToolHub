@@ -1,0 +1,33 @@
+body {
+    font-family: Arial, sans-serif;
+}
+.container {
+    margin-top: 20px;
+}
+h1 {
+    color: #333;
+}
+#category-filter {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 12px;
+}
+#cart-total {
+    margin-top: 20px;
+}
+.card {
+    margin-bottom: 20px;
+}
+.card-title {
+    font-weight: bold;
+}
+.card-text {
+    margin-bottom: 10px;
+}
+button {
+    background-color: #007BFF;
+    color: white;
+}
+button:hover {
+    background-color: #0056b3;
+}
