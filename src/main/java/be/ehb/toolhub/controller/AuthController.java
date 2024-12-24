@@ -48,8 +48,9 @@ public class AuthController {
     }
 
     @GetMapping("/logout")
-    public String logout() {
-        SecurityContextHolder.clearContext(); // Verwijdert de gebruikerssessie
-        return "redirect:/login"; // Redirect naar de loginpagina na uitloggen
-    }
+    public ResponseEntity<String> logout() {
+        SecurityContextHolder.clearContext();
+        return ResponseEntity.ok("Uitloggen succesvol. Ga terug naar /login.");
+}
+
 }
