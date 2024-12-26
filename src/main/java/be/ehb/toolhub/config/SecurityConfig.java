@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,25 +27,20 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeRequests(authz -> authz
-                .requestMatchers("/login", "/register").permitAll()  // Zorg ervoor dat login en register toegankelijk zijn zonder authenticatie
-                .requestMatchers("/api/reservations/**").authenticated()  // Alleen geauthenticeerde gebruikers kunnen reserveringen openen
-                .anyRequest().permitAll()
+                .requestMatchers("/login", "/register","/**/*.css").permitAll()  // Zorg ervoor dat login en register toegankelijk zijn zonder authenticatie
+                .requestMatchers("/api/reservations/**","/**/*.css").authenticated()  // Alleen geauthenticeerde gebruikers kunnen reserveringen openen
+                .anyRequest().authenticated()
             )
             .formLogin(form -> form
                 .loginPage("/login")  // Aangepaste inlogpagina
                 .permitAll()
                 .defaultSuccessUrl("/dashboard", true)  // Redirect naar dashboard na succesvolle login
             )
-            .logout(logout -> logout
-                .logoutUrl("/logout")  // Zorg ervoor dat de logout-URL correct is ingesteld
-                .logoutSuccessUrl("/login?logout")  // Redirect naar login-pagina na logout
-                .invalidateHttpSession(true)  // Vernietig de sessie bij logout
-                .clearAuthentication(true)
-                .permitAll()  // Zorg ervoor dat logout openbaar toegankelijk is
-            )
+            
             .csrf(csrf -> csrf
                 .ignoringRequestMatchers("/api/auth/login", "/api/auth/register", "/api/**", "/logout")
             )
+
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)  // Maak alleen sessies wanneer nodig
                 .invalidSessionUrl("/login")  // Redirect naar login bij een ongeldige sessie
@@ -54,6 +50,13 @@ public class SecurityConfig {
 
         return http.build();
     }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring()
+                       .requestMatchers("/**", "/js/**", "/images/**");
+    }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
