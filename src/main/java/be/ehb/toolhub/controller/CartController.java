@@ -50,11 +50,19 @@ public ResponseEntity<String> checkout(@RequestBody User user) {
         return new ResponseEntity<>("Cart is empty", HttpStatus.BAD_REQUEST);
     }
 
+    // Validate user data
+    if (user.getUsername() == null || user.getUsername().trim().isEmpty()) {
+        return new ResponseEntity<>("Username is required", HttpStatus.BAD_REQUEST);
+    }
+    if (user.getEmail() == null || user.getEmail().trim().isEmpty()) {
+        return new ResponseEntity<>("Email is required", HttpStatus.BAD_REQUEST);
+    }
+
     for (Product product : cart) {
         try {
-            // Maak een nieuwe reservering aan met alleen naam en e-mail
             Reservation reservation = new Reservation();
-
+            reservation.setUsername(user.getUsername().trim());
+            reservation.setEmail(user.getEmail().trim());
             reservation.setProduct(product);
             reservation.setStartDate(LocalDate.now());
             reservation.setEndDate(LocalDate.now().plusDays(1));
@@ -62,7 +70,8 @@ public ResponseEntity<String> checkout(@RequestBody User user) {
 
             reservationRepository.save(reservation);
         } catch (Exception e) {
-            return new ResponseEntity<>("Error during checkout: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Error during checkout: " + e.getMessage(),
+                HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
