@@ -8,7 +8,10 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class HomeController {
 
-
+@GetMapping("/")
+    public String home() {
+        return "redirect:/login";
+    }
 
     @GetMapping("/register")
     public ModelAndView register(Authentication authentication) {

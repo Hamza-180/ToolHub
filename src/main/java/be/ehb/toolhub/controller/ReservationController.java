@@ -24,16 +24,28 @@ public class ReservationController {
     }
 
     @PostMapping
-    public ResponseEntity<Reservation> createReservation(
-            @RequestBody Reservation reservation,
-            @AuthenticationPrincipal UserDetails userDetails) {
+public ResponseEntity<Reservation> createReservation(
+        @RequestBody Reservation reservation,
+        @AuthenticationPrincipal UserDetails userDetails) {
 
-        if (userDetails != null) {
-            reservation.setUsername(userDetails.getUsername());
-        }
+    // Validate required fields
+    if (userDetails == null || userDetails.getUsername() == null) {
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
+    if (reservation.getEmail() == null || reservation.getEmail().trim().isEmpty()) {
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    reservation.setUsername(userDetails.getUsername());
+
+    try {
         Reservation createdReservation = reservationService.createReservation(reservation);
         return new ResponseEntity<>(createdReservation, HttpStatus.CREATED);
+    } catch (Exception e) {
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+}
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReservation(@PathVariable Long id) {

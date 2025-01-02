@@ -47,28 +47,19 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestParam String username, @RequestParam String password) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username, password)
-        );
+public ResponseEntity<String> loginUser(@RequestParam String username, @RequestParam String password) {
+    Authentication authentication = authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(username, password)
+    );
 
-        if (authentication.isAuthenticated()) {
-            // Maak een reservering aan met dummy gegevens
-            Reservation reservation = new Reservation();
-            reservation.setUsername(username);
-            reservation.setEmail("user@example.com"); // Dit kan van de gebruiker komen
-            reservation.setProduct(null); // Voeg hier een Product toe als dat nodig is
-            reservation.setStartDate(LocalDate.now()); // Stel hier de startdatum in
-            reservation.setEndDate(LocalDate.now().plusDays(1)); // Stel hier de einddatum in
-            reservation.setStatus("Reserved"); // Stel de status in
-
-            // Creëer de reservering
-            reservationService.createReservation(reservation);
-            return ResponseEntity.ok("Login successful");
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed");
-        }
+    if (authentication.isAuthenticated()) {
+        // Alleen een succesvolle login melding retourneren
+        return ResponseEntity.ok("Login successful");
+    } else {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed");
     }
+}
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {

@@ -1,0 +1,28 @@
+/* checkout.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+.container {
+    margin-top: 50px;
+}
+
+h1 {
+    font-size: 2.5em;
+    color: #28a745;
+}
+
+h4 {
+    font-size: 1.5em;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 1.5em;
+}
+
+.btn {
+    font-size: 1.1em;
+    padding: 10px 20px;
+}

@@ -1,0 +1,100 @@
+/* Algemene styling voor de pagina */
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+h1 {
+    color: #333;
+    font-size: 2em;
+    text-align: center;
+}
+
+/* Styling voor het formulier */
+form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* Styling voor labels en invoervelden */
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1.1em;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 1em;
+}
+
+/* Focus effect op invoervelden */
+input:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+/* Styling voor de submit-knop */
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.1em;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Styling voor berichten (fout/succes) */
+.message {
+    margin-top: 10px;
+    font-size: 1em;
+    padding: 10px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+/* Styling voor de link naar de loginpagina */
+.link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.link button {
+    background-color: #28a745;
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.link button:hover {
+    background-color: #218838;
+}

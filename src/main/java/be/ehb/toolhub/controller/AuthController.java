@@ -2,6 +2,7 @@ package be.ehb.toolhub.controller;
 
 import be.ehb.toolhub.model.User;
 import be.ehb.toolhub.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,9 +48,18 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/logout")
-    public String logout() {
-        SecurityContextHolder.clearContext(); // Verwijdert de gebruikerssessie
-        return "redirect:/login"; // Redirect naar de loginpagina na uitloggen
+   @RestController
+    public class LogoutController {
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        request.getSession().invalidate();
+        SecurityContextHolder.clearContext();
+        return ResponseEntity.status(HttpStatus.FOUND)
+                         .header("Location", "/login")
+                         .build();
     }
+}
+
+
 }

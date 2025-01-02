@@ -3,8 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, shrink-to-fit=no">
+    <meta name="csrf-token" content="${_csrf.token}"> <!-- CSRF Token -->
     <title>Product List</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/product-list.css">
 </head>
 <body>
     <!-- Navigatiebalk -->
@@ -23,8 +25,12 @@
                     <a class="nav-link" href="/add-product">Add Product</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/logout">Logout</a>
+                    <a class="nav-link" href="/product-list">Remove Product</a>
                 </li>
+                <a class="nav-link" href="#" onclick="document.getElementById('logout-form').submit();">Logout</a>
+            <form id="logout-form" action="/logout" method="POST" style="display: none;">
+                <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+            </form>
 
 
             </ul>
@@ -38,6 +44,9 @@
     </div>
 
     <script>
+        // Get CSRF token from meta tag
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
         // Fetch products from the API
         function fetchProducts() {
             fetch('/api/products')
@@ -67,7 +76,11 @@
         function deleteProduct(productId) {
             if (confirm('Are you sure you want to delete this product?')) {
                 fetch(`/api/products/${productId}`, {
-                    method: 'DELETE'
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken // Add the CSRF token to the request header
+                    }
                 })
                 .then(response => {
                     if (response.ok) {
