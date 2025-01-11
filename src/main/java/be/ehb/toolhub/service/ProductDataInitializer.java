@@ -18,19 +18,18 @@ public class ProductDataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Controleer of de database al producten bevat
+productRepository.save(new Product("LED100", "Een energiezuinige 100W LED-lamp, ideaal voor zowel binnen- als buitentoepassingen, met lange levensduur en helder licht.", "LED", 5, BigDecimal.valueOf(20.00)));
+            productRepository.save(new Product("Flood200", "Krachtige 200W LED-floodlight, ontworpen voor het verlichten van grote evenementen, biedt een breed en helder licht.", "LED", 4, BigDecimal.valueOf(60.00)));
 
-            // Voeg enkele producten toe als er nog geen producten zijn
-            productRepository.save(new Product("Lamp 100W LED", "Lampen", "Energiezuinige LED-lamp van 100 watt.", 5, BigDecimal.valueOf(20.00)));
-            productRepository.save(new Product("Podiumelement - 1m x 1m", "Podiumelementen", "Stabiel podiumelement voor tijdelijke opstellingen.", 3, BigDecimal.valueOf(75.00)));
-            productRepository.save(new Product("Lichtpaneel RGB", "Lichtpanelen", "RGB lichtpaneel voor decoratie en verlichting.", 10, BigDecimal.valueOf(150.00)));
-            productRepository.save(new Product("XLR Kabel 3 meter", "Kabels", "XLR kabel voor audioverbindingen, 3 meter.", 20, BigDecimal.valueOf(15.00)));
-            productRepository.save(new Product("Powerstrip 5 stopcontacten", "Accessoires", "Powerstrip met 5 stopcontacten.", 15, BigDecimal.valueOf(10.00)));
-            productRepository.save(new Product("Stage Monitor 15 inch", "Podiumelementen", "Stage monitor voor podiumgebruik.", 2, BigDecimal.valueOf(250.00)));
-            productRepository.save(new Product("Mic Standaard", "Accessoires", "Verstelbare microfoonstandaard.", 8, BigDecimal.valueOf(25.00)));
-            productRepository.save(new Product("LED Floodlight 200W", "Lampen", "LED floodlight voor evenementenverlichting.", 4, BigDecimal.valueOf(60.00)));
-            productRepository.save(new Product("Audiomixer 8 kanaals", "Podiumelementen", "8 kanaals audiomixer voor geluidssystemen.", 1, BigDecimal.valueOf(350.00)));
-            productRepository.save(new Product("Lichtpaneel LED Wit", "Lichtpanelen", "Wit LED lichtpaneel voor sfeerverlichting.", 6, BigDecimal.valueOf(80.00)));
+            productRepository.save(new Product("Podium1x1", "Een stabiel podiumelement van 1m x 1m, ideaal voor tijdelijke opstellingen bij evenementen en snel op te zetten.", "Podium", 3, BigDecimal.valueOf(75.00)));
+            productRepository.save(new Product("Monitor15", "Professionele 15 inch stage monitor, ontworpen voor podiumgebruik en biedt helder geluid voor optredens.", "Podium", 2, BigDecimal.valueOf(250.00)));
+            productRepository.save(new Product("Mix8", "Een 8-kanaals audiomixer voor live-optredens, met voldoende ingangen voor verschillende geluidsbronnen en hoogwaardige geluidsbehandeling.", "Podium", 1, BigDecimal.valueOf(350.00)));
+
+            productRepository.save(new Product("XLR3", "3 meter lange XLR-kabel voor betrouwbare verbindingen tussen audioapparatuur, geschikt voor live-geluidssystemen.", "Kabel", 20, BigDecimal.valueOf(15.00)));
+            productRepository.save(new Product("Power5", "Powerstrip met 5 stopcontacten voor het aansluiten van meerdere apparaten tegelijkertijd, biedt bescherming tegen overbelasting.", "Access", 15, BigDecimal.valueOf(10.00)));
+            productRepository.save(new Product("MicStand", "Verstelbare microfoonstandaard die geschikt is voor gebruik op het podium of in de studio, met robuuste ondersteuning voor verschillende microfoons.", "Access", 8, BigDecimal.valueOf(25.00)));
+            productRepository.save(new Product("RGBPanel", "RGB lichtpaneel, perfect voor sfeerverlichting of decoratie, biedt veelzijdige kleuropties voor verschillende settings.", "LED", 10, BigDecimal.valueOf(150.00)));
+            productRepository.save(new Product("LEDWhite", "Wit LED paneel voor sfeerverlichting, ideaal voor het creëren van een zachte en stijlvolle verlichting voor diverse omgevingen.", "LED", 6, BigDecimal.valueOf(80.00)));
 
     }
 }
