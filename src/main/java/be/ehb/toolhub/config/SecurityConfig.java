@@ -26,20 +26,29 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeRequests(authz -> authz
-                .requestMatchers("/login", "/register","/**/*.css").permitAll()  // Zorg ervoor dat login en register toegankelijk zijn zonder authenticatie
-                .requestMatchers("/api/reservations/**","/**/*.css").authenticated()  // Alleen geauthenticeerde gebruikers kunnen reserveringen openen
-                .anyRequest().authenticated()
+
+
+            .authorizeHttpRequests(authz -> authz
+                .requestMatchers("/login", "/register", "/css/**", "/js/**").permitAll()  // Zorg ervoor dat login, register en statische bestanden toegankelijk zijn zonder authenticatie
+                .requestMatchers("/api/auth/login", "/api/auth/register", "/api/**").permitAll()  // Toestaan voor API-login en registratie
+                .requestMatchers("/api/reservations/**").authenticated()  // Alleen geauthenticeerde gebruikers kunnen reserveringen openen
+                .anyRequest().authenticated()  // Alle andere routes vereisen authenticatie
             )
             .formLogin(form -> form
-                .loginPage("/login")  // Aangepaste inlogpagina
+                .loginPage("/login")  // Specificeer de loginpagina
                 .permitAll()
                 .defaultSuccessUrl("/dashboard", true)  // Redirect naar dashboard na succesvolle login
             )
-            
-            .csrf(csrf -> csrf
-                .ignoringRequestMatchers("/api/auth/login", "/api/auth/register", "/api/**", "/logout")
+            .logout(logout -> logout
+                .logoutUrl("/logout")  // Specificeer logout URL
+                .logoutSuccessUrl("/login")  // Redirect naar login na logout
+                .permitAll()
             )
+
+                  .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/login", "/register", "/logout","/api/**")
+                )
+
 
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)  // Maak alleen sessies wanneer nodig
@@ -54,13 +63,12 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
-                       .requestMatchers("/**", "/js/**", "/images/**");
+                       .requestMatchers("/js/**", "/images/**", "/css/**");  // Zorg ervoor dat statische bestanden worden genegeerd
     }
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(12);
+        return new BCryptPasswordEncoder(12);  // Gebruik een BCryptPasswordEncoder met een werkfactor van 12
     }
 
     @Bean

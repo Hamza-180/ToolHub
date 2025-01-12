@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="${_csrf.token}">
     <title>Checkout</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/checkout.css">
@@ -26,6 +27,9 @@
 </div>
 
 <script>
+    // Haal de CSRF-token op uit de meta-tag
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
     // Functie om het totaalbedrag van het winkelwagentje op te halen
     function fetchCartTotal() {
         fetch('/api/cart/total')
@@ -49,6 +53,7 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken
             },
             body: JSON.stringify(userData) // Verstuur de gebruikersinformatie
         })

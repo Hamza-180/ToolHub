@@ -13,21 +13,22 @@ public class HomeController {
         return "redirect:/login";
     }
 
-    @GetMapping("/register")
-    public ModelAndView register(Authentication authentication) {
-        if (authentication != null && authentication.isAuthenticated()) {
-            // Als de gebruiker al is ingelogd, redirect naar de homepagina
-            return new ModelAndView("redirect:/");
-        }
-        return new ModelAndView("register");
+   @GetMapping("/login")
+public ModelAndView login(Authentication authentication) {
+    if (authentication != null && authentication.isAuthenticated()) {
+        // Als de gebruiker al is ingelogd, redirect naar de homepagina
+        return new ModelAndView("redirect:/dashboard");
     }
+    return new ModelAndView("login");
+}
 
-    @GetMapping("/login")
-    public ModelAndView login(Authentication authentication) {
-        if (authentication != null && authentication.isAuthenticated()) {
-            // Als de gebruiker al is ingelogd, redirect naar de homepagina
-            return new ModelAndView("redirect:/");
-        }
-        return new ModelAndView("login");
+@GetMapping("/register")
+public ModelAndView register(Authentication authentication) {
+    if (authentication != null && authentication.isAuthenticated()) {
+        // Als de gebruiker al is ingelogd, redirect naar de homepagina
+        return new ModelAndView("redirect:/");
     }
+    return new ModelAndView("register");
+}
+
 }

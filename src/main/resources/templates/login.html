@@ -3,60 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="_csrf" content="${_csrf.token}"> <!-- Voeg CSRF-token toe -->
+    <meta name="_csrf" content="${_csrf.token}">
     <link rel="stylesheet" href="/login.css">
     <title>Inloggen</title>
-
 </head>
 <body>
     <h1>Inloggen</h1>
-    <form id="loginForm" method="POST">
+    <form action="/login" method="POST"> <!-- Laat Spring Security de login afhandelen -->
         <input type="hidden" name="_csrf" value="${_csrf.token}"> <!-- CSRF Token -->
-        <label for="loginUsername">Gebruikersnaam:</label>
-        <input type="text" id="loginUsername" name="loginUsername" required>
+        <label for="username">Gebruikersnaam:</label>
+        <input type="text" id="username" name="username" required>
 
-        <label for="loginPassword">Wachtwoord:</label>
-        <input type="password" id="loginPassword" name="loginPassword" required>
+        <label for="password">Wachtwoord:</label>
+        <input type="password" id="password" name="password" required>
 
         <button type="submit">Inloggen</button>
     </form>
     <p id="loginMessage"></p>
     <p class="link">
-        <button onclick="location.href='register'" style="background-color: #007BFF; color: white; border: none; cursor: pointer; padding: 10px 15px;">Geen account? Registreer hier.</button>
+        <button onclick="location.href='/register'" style="background-color: #007BFF; color: white; border: none; cursor: pointer; padding: 10px 15px;">Geen account? Registreer hier.</button>
     </p>
-
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            const username = document.getElementById('loginUsername').value;
-            const password = document.getElementById('loginPassword').value;
-            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
-
-            fetch('/api/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken  // Voeg het CSRF-token toe aan de header
-                },
-                body: JSON.stringify({ username, password })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(err => {
-                        throw new Error(err.message || 'Inloggen mislukt');
-                    });
-                }
-                return response.text();
-            })
-            .then(data => {
-                document.getElementById('loginMessage').innerText = 'Inloggen succesvol!';
-                window.location.href = '/dashboard';
-            })
-            .catch(error => {
-                document.getElementById('loginMessage').innerText = error.message;
-            });
-        });
-    </script>
 </body>
 </html>
