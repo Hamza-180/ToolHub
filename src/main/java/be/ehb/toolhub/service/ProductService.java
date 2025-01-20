@@ -16,10 +16,11 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    // Haalt een lijst op van alle producten uit de database.
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
-
+//Zoekt en retourneert producten die behoren tot een specifieke categorie
     public List<Product> getProductsByCategory(String category) {
         return productRepository.findByCategory(category);
     }

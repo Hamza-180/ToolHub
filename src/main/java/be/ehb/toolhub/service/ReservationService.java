@@ -12,13 +12,14 @@ public class ReservationService {
     @Autowired
     private ReservationRepository reservationRepository;
 
+    //Haalt een lijst op van alle reserveringen uit de database.
     public List<Reservation> getAllReservations() {
         return reservationRepository.findAll();
     }
 
-    // Accepteert nu een Reservation-object in plaats van een String
+
     public Reservation createReservation(Reservation reservation) {
-        // Hier kun je andere logica toevoegen indien nodig
+
         return reservationRepository.save(reservation);
     }
 
@@ -26,6 +27,7 @@ public class ReservationService {
         reservationRepository.deleteById(id);
     }
 
+    // Haalt een lijst op van reserveringen die gekoppeld zijn aan een specifieke gebruiker
     public List<Reservation> getReservationsByUsername(String username) {
         return reservationRepository.findByUsername(username);
     }

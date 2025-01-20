@@ -41,7 +41,8 @@ public class UserServiceImpl implements UserService {
     }
 
    @Override
-public User registerUser(User user) {
+    public User registerUser(User user) {
+        // kijk als gebruiker al bestaat en gooit een Exception
     if (userRepository.existsByUsername(user.getUsername())) {
         throw new IllegalArgumentException("Gebruikersnaam bestaat al");
     }

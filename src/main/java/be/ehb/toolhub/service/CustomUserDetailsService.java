@@ -20,6 +20,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("Gebruiker niet gevonden");
         }
+        // Als de gebruiker wordt gevonden, wordt het omgezet naar een UserDetails object  met zijn username, password en role user
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getUsername())
                 .password(user.getPassword())

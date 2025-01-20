@@ -16,6 +16,7 @@ public class ProductDataInitializer implements CommandLineRunner {
         this.productRepository = productRepository;
     }
 
+    // gaat dummy data toevoegen zonder dat ik het zelf moet maken
     @Override
     public void run(String... args) throws Exception {
 productRepository.save(new Product("LED100", "Een energiezuinige 100W LED-lamp, ideaal voor zowel binnen- als buitentoepassingen, met lange levensduur en helder licht.", "LED", 5, BigDecimal.valueOf(20.00)));

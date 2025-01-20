@@ -44,12 +44,9 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/login")  // Redirect naar login na logout
                 .permitAll()
             )
-
                   .csrf(csrf -> csrf
                         .ignoringRequestMatchers("/login", "/register", "/logout","/api/**")
                 )
-
-
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)  // Maak alleen sessies wanneer nodig
                 .invalidSessionUrl("/login")  // Redirect naar login bij een ongeldige sessie
@@ -60,10 +57,11 @@ public class SecurityConfig {
         return http.build();
     }
 
+    //  zorgt ervoor dat statische bestanden zoals JavaScript, afbeeldingen en CSS niet door Spring Security worden beveiligd.
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
-                       .requestMatchers("/js/**", "/images/**", "/css/**");  // Zorg ervoor dat statische bestanden worden genegeerd
+                       .requestMatchers("/js/**", "/images/**", "/css/**","/login.css","/Register.css");  // Zorg ervoor dat statische bestanden worden genegeerd
     }
 
     @Bean
@@ -71,6 +69,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder(12);  // Gebruik een BCryptPasswordEncoder met een werkfactor van 12
     }
 
+    // controleer of de gebruiker geldig is
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         AuthenticationManagerBuilder authBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);

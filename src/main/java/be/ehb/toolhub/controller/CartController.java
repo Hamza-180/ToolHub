@@ -25,7 +25,7 @@ public class CartController {
     private ReservationRepository reservationRepository;
 
     @Autowired
-    private UserRepository userRepository; // Voeg deze lijn toe
+    private UserRepository userRepository;
 
     @GetMapping
     public ResponseEntity<List<Product>> getCart() {

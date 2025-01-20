@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors; // Voor gebruik in getAllCategories
 
 @RestController
 @RequestMapping("/api/products")
@@ -18,6 +17,7 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    // om alle producten weer te geven
     @GetMapping
     public List<Product> getAllProducts(@RequestParam(required = false) String category) {
         if (category != null && !category.isEmpty()) {
@@ -26,8 +26,9 @@ public class ProductController {
         return productService.getAllProducts();
     }
 
+    // haalt een product op basis van id  als er geen producten zijn dat stuurt het een status not found 404
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
+    public ResponseEntity<Product> GetProductById(@PathVariable Long id) {
         return productService.getProductById(id)
                 .map(product -> new ResponseEntity<>(product, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -45,7 +46,7 @@ public class ProductController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // Voeg deze methode toe om alle unieke categorieën op te halen
+    // om alle unieke categorieën op te halen
     @GetMapping("/categories")
     public ResponseEntity<Set<String>> getAllCategories() {
         Set<String> categories = (Set<String>) productService.getAllCategories();
